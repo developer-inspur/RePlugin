@@ -16,7 +16,8 @@
 
 package com.qihoo360.replugin.loader.a;
 
-import android.app.ActivityGroup;
+import android.app.ActivityGroupFake;
+import android.app.LocalActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -25,13 +26,27 @@ import android.os.Bundle;
 import com.qihoo360.replugin.RePluginInternal;
 import com.qihoo360.replugin.helper.LogRelease;
 import com.qihoo360.replugin.loader.PluginResource;
+import com.qihoo360.replugin.loader.p.PluginLocalActivityManager;
 
 /**
  * @author RePlugin Team
  */
-public abstract class PluginActivityGroup extends ActivityGroup {
+public abstract class PluginActivityGroup extends ActivityGroupFake {
 
     private PluginResource pluginResource;
+
+    public PluginActivityGroup() {
+        super();
+    }
+
+    public PluginActivityGroup(boolean singleActivityMode) {
+        super(singleActivityMode);
+    }
+
+    @Override
+    public LocalActivityManager createLocalActivityManager(boolean singleActivityMode) {
+        return new PluginLocalActivityManager(this, singleActivityMode);
+    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
