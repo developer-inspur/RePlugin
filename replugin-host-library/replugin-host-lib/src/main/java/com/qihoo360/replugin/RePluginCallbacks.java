@@ -16,9 +16,11 @@
 
 package com.qihoo360.replugin;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 
 import com.qihoo360.loader2.PluginContext;
 import com.qihoo360.replugin.model.PluginInfo;
@@ -148,7 +150,6 @@ public class RePluginCallbacks {
      * PluginContext {@link PluginContext} 是插件中使用的Context对象（Activity.mBase 和 Application.mBase）
      *
      * @return 可以允许返回null 表示无需注入自定义逻辑
-     *
      * @since 2.0.0
      */
     public ContextInjector createContextInjector() {
@@ -176,5 +177,33 @@ public class RePluginCallbacks {
      */
     public void initPnPluginOverride() {
         // default, do Nothing
+    }
+
+    /**
+     * 增加回调，允许拦截插件打开activity的流程
+     *
+     * @param context
+     * @param intent
+     * @return
+     *
+     * @since 2.3.5
+     */
+    public boolean onPluginStartActivity(Context context, Intent intent) {
+        return false;
+    }
+
+    /**
+     * 增加回调，允许拦截插件打开activity的流程
+     *
+     * @param activity
+     * @param intent
+     * @param requestCode
+     * @param options
+     * @return
+     *
+     * @since 2.3.5
+     */
+    public boolean onPluginStartActivityForResult(Activity activity, Intent intent, int requestCode, Bundle options) {
+        return false;
     }
 }

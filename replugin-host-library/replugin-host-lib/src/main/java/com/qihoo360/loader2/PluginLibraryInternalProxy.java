@@ -78,6 +78,11 @@ public class PluginLibraryInternalProxy {
             LogDebug.d(PLUGIN_TAG, "start context: intent=" + intent);
         }
 
+        // 询问是否需要拦截startActivity操作
+        if (RePlugin.getConfig().getCallbacks().onPluginStartActivity(context, intent)) {
+            return true;
+        }
+
         // 兼容模式，直接使用标准方式启动
         if (intent.getBooleanExtra(IPluginManager.KEY_COMPATIBLE, false)) {
             PmBase.cleanIntentPluginParams(intent);
@@ -312,6 +317,11 @@ public class PluginLibraryInternalProxy {
      * @param options     附加的数据
      */
     public boolean startActivityForResult(Activity activity, Intent intent, int requestCode, Bundle options) {
+        // 询问是否需要拦截插件StartActivityForResult的动作
+        if (RePlugin.getConfig().getCallbacks().onPluginStartActivityForResult(activity, intent, requestCode, options)) {
+            return true;
+        }
+
         String plugin = getPluginName(activity, intent);
 
         if (LOG) {
