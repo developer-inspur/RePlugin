@@ -16,7 +16,8 @@
 
 package com.qihoo360.replugin.loader.a;
 
-import android.app.TabActivity;
+import android.app.LocalActivityManager;
+import android.app.TabActivityFake;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -25,11 +26,12 @@ import android.os.Bundle;
 import com.qihoo360.replugin.RePluginInternal;
 import com.qihoo360.replugin.helper.LogRelease;
 import com.qihoo360.replugin.loader.PluginResource;
+import com.qihoo360.replugin.loader.p.PluginLocalActivityManager;
 
 /**
  * @author RePlugin Team
  */
-public abstract class PluginTabActivity extends TabActivity {
+public abstract class PluginTabActivity extends TabActivityFake {
 
     private PluginResource pluginResource;
 
@@ -38,6 +40,11 @@ public abstract class PluginTabActivity extends TabActivity {
         newBase = RePluginInternal.createActivityContext(this, newBase);
         pluginResource = new PluginResource(newBase.getResources());
         super.attachBaseContext(newBase);
+    }
+
+    @Override
+    public LocalActivityManager createLocalActivityManager(boolean singleActivityMode) {
+        return new PluginLocalActivityManager(this, singleActivityMode);
     }
 
     @Override
