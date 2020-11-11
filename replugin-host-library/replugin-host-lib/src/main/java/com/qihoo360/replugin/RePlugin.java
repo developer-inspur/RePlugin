@@ -263,7 +263,10 @@ public class RePlugin {
         return Factory.startActivity(context, intent, pluginName, activity, IPluginManager.PROCESS_AUTO);
     }
 
-    /**
+    public static boolean startActivityForResult(Activity activity, Intent intent, String pluginName, String activityName, int requestCode, Bundle options) {
+        return Factory.startActivityForResult(activity, intent, pluginName, activityName, requestCode, options);
+    }
+  /**
      * 通过 forResult 方式启动一个插件的 Activity
      *
      * @param activity    源 Activity

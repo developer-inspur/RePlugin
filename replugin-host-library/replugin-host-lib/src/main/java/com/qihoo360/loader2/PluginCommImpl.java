@@ -380,6 +380,14 @@ public class PluginCommImpl {
         return mPluginMgr.mInternal.startActivity(context, intent, plugin, activity, process, true);
     }
 
+    public boolean startActivityForResult(Activity activity, Intent intent, String plugin, String activityName, int requestCode, Bundle options) {
+        if (LOG) {
+            LogDebug.d(PLUGIN_TAG, "startActivityForResult: intent=" + intent + " requestCode=" + requestCode+ " options=" + options);
+        }
+
+        return mPluginMgr.mInternal.startActivityForResult(activity, intent, plugin, activityName, requestCode, options);
+    }
+
     /**
      * 启动一个插件中的 activity 'forResult'
      * @return 插件机制层是否成功，例如没有插件存在、没有合适的Activity坑

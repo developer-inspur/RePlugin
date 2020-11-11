@@ -402,4 +402,27 @@ public final class Factory {
     public static boolean startActivityForResult(Activity activity, Intent intent, int requestCode, Bundle options) {
         return sPluginManager.startActivityForResult(activity, intent, requestCode, options);
     }
+
+    /**
+     * 通过 forResult 方式启动一个插件的 Activity
+     *
+     * @param activity
+     * @param intent
+     * @param plugin
+     * @param activityName
+     * @param requestCode
+     * @param options
+     * @return
+     * @since 2.3.5
+     */
+    public static final boolean startActivityForResult(Activity activity, Intent intent, String plugin, String activityName, int requestCode, Bundle options) {
+        if (!TextUtils.isEmpty(plugin) && !TextUtils.isEmpty(activityName)) {
+            intent.setComponent(RePlugin.createComponentName(plugin, activityName));
+        }
+
+        boolean result = sPluginManager.startActivityForResult(activity, intent, plugin, activityName, requestCode, options);
+
+        RePlugin.getConfig().getEventCallbacks().onStartActivityCompleted(plugin, activityName, result);
+        return result;
+    }
 }

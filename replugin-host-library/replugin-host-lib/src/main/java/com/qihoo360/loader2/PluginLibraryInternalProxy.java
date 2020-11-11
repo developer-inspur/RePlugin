@@ -317,12 +317,22 @@ public class PluginLibraryInternalProxy {
      * @param options     附加的数据
      */
     public boolean startActivityForResult(Activity activity, Intent intent, int requestCode, Bundle options) {
+
+        String plugin = getPluginName(activity, intent);
+        ComponentName cn = intent.getComponent();
+        if (cn == null) {
+            return false;
+        }
+        String name = cn.getClassName();
+
+        return startActivityForResult(activity, intent, plugin, name, requestCode, options);
+    }
+
+    public boolean startActivityForResult(Activity activity, Intent intent, String plugin, String activityName, int requestCode, Bundle options) {
         // 询问是否需要拦截插件StartActivityForResult的动作
         if (RePlugin.getConfig().getCallbacks().onPluginStartActivityForResult(activity, intent, requestCode, options)) {
             return true;
         }
-
-        String plugin = getPluginName(activity, intent);
 
         if (LOG) {
             LogDebug.d(PLUGIN_TAG, "start activity with startActivityForResult: intent=" + intent);
@@ -332,13 +342,7 @@ public class PluginLibraryInternalProxy {
             return false;
         }
 
-        ComponentName cn = intent.getComponent();
-        if (cn == null) {
-            return false;
-        }
-        String name = cn.getClassName();
-
-        ComponentName cnNew = loadPluginActivity(intent, plugin, name, IPluginManager.PROCESS_AUTO);
+        ComponentName cnNew = loadPluginActivity(intent, plugin, activityName, IPluginManager.PROCESS_AUTO);
         if (cnNew == null) {
             return false;
         }
@@ -352,6 +356,8 @@ public class PluginLibraryInternalProxy {
         }
         return true;
     }
+
+
 
     /**
      * 获取插件名称
