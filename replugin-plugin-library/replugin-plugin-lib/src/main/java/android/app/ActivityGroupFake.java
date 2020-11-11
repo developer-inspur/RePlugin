@@ -16,8 +16,7 @@
 
 package android.app;
 
-import android.content.Intent;
-import android.os.Bundle;
+import com.qihoo360.replugin.utils.ReflectUtils;
 
 /**
  * A screen that contains and runs multiple embedded activities.
@@ -27,90 +26,23 @@ import android.os.Bundle;
  * available on older platforms through the Android compatibility package.
  */
 @Deprecated
-public class ActivityGroupFake extends Activity {
-    private static final String STATES_KEY = "android:states";
-    static final String PARENT_NON_CONFIG_INSTANCE_KEY = "android:parent_non_config_instance";
-
-    protected LocalActivityManager mLocalActivityManager;
+public class ActivityGroupFake extends ActivityGroup {
 
     public ActivityGroupFake() {
         this(true);
     }
 
     public ActivityGroupFake(boolean singleActivityMode) {
-        mLocalActivityManager = createLocalActivityManager(singleActivityMode);
+        super(singleActivityMode);
+
+        LocalActivityManager activityManager = createLocalActivityManager(singleActivityMode);
+        // REPLUGIN增加hook点，支持ActivityGroup
+        // Android官方已废弃ActivityGroup以及TabActivity，建议业务使用Fragment进行多视图管理
+        ReflectUtils.setFieldNonE(ActivityGroup.class, this, "mLocalActivityManager", activityManager);
     }
 
     public LocalActivityManager createLocalActivityManager(boolean singleActivityMode) {
         return new LocalActivityManager(this, singleActivityMode);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle states = savedInstanceState != null
-                ? (Bundle) savedInstanceState.getBundle(STATES_KEY) : null;
-        mLocalActivityManager.dispatchCreate(states);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mLocalActivityManager.dispatchResume();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Bundle state = mLocalActivityManager.saveInstanceState();
-        if (state != null) {
-            outState.putBundle(STATES_KEY, state);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mLocalActivityManager.dispatchPause(isFinishing());
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mLocalActivityManager.dispatchStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mLocalActivityManager.dispatchDestroy(isFinishing());
-    }
-
-
-
-    public Activity getCurrentActivity() {
-        return mLocalActivityManager.getCurrentActivity();
-    }
-
-    public final LocalActivityManager getLocalActivityManager() {
-        return mLocalActivityManager;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Activity act = mLocalActivityManager.getCurrentActivity();
-            /*
-            if (false) Log.v(
-                TAG, "Dispatching result: who=" + who + ", reqCode=" + requestCode
-                + ", resCode=" + resultCode + ", data=" + data
-                + ", rec=" + rec);
-            */
-        if (act != null) {
-            act.onActivityResult(requestCode, resultCode, data);
-            return;
-        }
-
-        super.onActivityResult(requestCode, resultCode, data);
     }
 }
 
