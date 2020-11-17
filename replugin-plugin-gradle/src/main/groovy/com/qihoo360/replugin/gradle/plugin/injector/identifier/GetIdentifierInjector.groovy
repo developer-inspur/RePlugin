@@ -34,6 +34,11 @@ public class GetIdentifierInjector extends BaseInjector {
 
     @Override
     def injectClass(ClassPool pool, String dir, Map config) {
+        // 跳过android/app下的文件
+        if (dir.contains('android' + File.separator + 'app')) {
+            println "跳过$dir"
+            return
+        }
 
         if (editor == null) {
             editor = new GetIdentifierExprEditor()

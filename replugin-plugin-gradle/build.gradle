@@ -97,28 +97,28 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
-
-
-
-// add javadoc/source jar tasks as artifacts
-artifacts {
-    archives sourcesJar, javadocJar
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            if (plugins.hasPlugin('war')) {
-                from components.web
-            } else {
-                from components.java
-            }
-
-            artifact sourcesJar
-            artifact javadocJar
-        }
-    }
-}
+//
+//
+//
+//// add javadoc/source jar tasks as artifacts
+//artifacts {
+//    archives sourcesJar, javadocJar
+//}
+////
+//publishing {
+//    publications {
+//        mavenJava(MavenPublication) {
+//            if (plugins.hasPlugin('war')) {
+//                from components.web
+//            } else {
+//                from components.java
+//            }
+//
+//            artifact sourcesJar
+//            artifact javadocJar
+//        }
+//    }
+//}
 
 project.ext.RP_ARTIFACT_ID = 'replugin-plugin-gradle'
 apply from: '../rp-publish.gradle'

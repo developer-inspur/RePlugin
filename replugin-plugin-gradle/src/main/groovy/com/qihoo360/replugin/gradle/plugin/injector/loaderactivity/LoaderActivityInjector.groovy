@@ -95,7 +95,10 @@ public class LoaderActivityInjector extends BaseInjector {
 
             /* 从当前 Activity 往上回溯，直到找到需要替换的 Activity */
             def superCls = originSuperCls
-            while (superCls != null && !(superCls.name in loaderActivityRules.keySet())) {
+
+            while (superCls != null &&
+                    !(superCls.name in loaderActivityRules.keySet()) &&
+                    !(superCls.name in loaderActivityRules.values())) {
                 // println ">>> 向上查找 $superCls.name"
                 ctCls = superCls
                 superCls = ctCls.superclass

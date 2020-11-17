@@ -38,6 +38,12 @@ public class ProviderInjector2 extends BaseInjector {
     @Override
     def injectClass(ClassPool pool, String dir, Map config) {
 
+        // 跳过android/app下的文件
+        if (dir.contains('android' + File.separator + 'app')) {
+            println "跳过$dir"
+            return
+        }
+
         // 不处理非 build 目录下的类
 /*
         if (!dir.contains('build' + File.separator + 'intermediates')) {
