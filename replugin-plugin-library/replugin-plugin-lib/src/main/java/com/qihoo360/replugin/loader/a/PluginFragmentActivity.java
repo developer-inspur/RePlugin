@@ -24,6 +24,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 
+import com.qihoo360.replugin.RePluginFramework;
 import com.qihoo360.replugin.RePluginInternal;
 import com.qihoo360.replugin.helper.LogRelease;
 import com.qihoo360.replugin.loader.PluginResource;
@@ -46,7 +47,7 @@ public abstract class PluginFragmentActivity extends FragmentActivity {
 
     @Override
     public Resources getResources() {
-        if (pluginResource != null){
+        if (RePluginFramework.isHostInitialized() && pluginResource != null) {
             return pluginResource;
         }
         return super.getResources();

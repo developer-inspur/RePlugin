@@ -22,6 +22,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
+import com.qihoo360.replugin.RePluginFramework;
 import com.qihoo360.replugin.RePluginInternal;
 import com.qihoo360.replugin.helper.LogRelease;
 import com.qihoo360.replugin.loader.PluginResource;
@@ -43,7 +44,7 @@ public class PluginPreferenceActivity extends PreferenceActivity {
 
     @Override
     public Resources getResources() {
-        if (pluginResource != null){
+        if (RePluginFramework.isHostInitialized() && pluginResource != null) {
             return pluginResource;
         }
         return super.getResources();
